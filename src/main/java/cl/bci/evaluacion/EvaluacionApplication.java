@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EvaluacionApplication {
 
 	public static void main(String[] args) {
-		log.info("=== iniciando EvaluacionApplication ===");
 		SpringApplication.run(EvaluacionApplication.class, args);
 	}
 

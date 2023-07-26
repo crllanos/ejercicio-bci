@@ -6,6 +6,7 @@ import cl.bci.evaluacion.dto.UserRegistryRequestDTO;
 import cl.bci.evaluacion.entity.PhoneEntity;
 import cl.bci.evaluacion.entity.UserEntity;
 import cl.bci.evaluacion.service.IUserRegistryService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +18,10 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class UserRegistryController {
 
-    @Autowired
-    IUserRegistryService iUserRegistryService;
+    private final IUserRegistryService iUserRegistryService;
 
     @PostMapping("/user-registry")
     public RegistryResponseDTO userRegistry(@RequestBody UserRegistryRequestDTO userRegistry){
