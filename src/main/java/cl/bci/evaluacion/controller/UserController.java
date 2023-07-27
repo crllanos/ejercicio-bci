@@ -45,34 +45,30 @@ public class UserController {
     public UserResponseDTO createUser(@RequestBody UserRequestDTO userRequest){
         log.info(String.format("Creating user: %s", util.obj2Json(userRequest)));
 
-        // phone list
-        List<PhoneEntity> phones = new ArrayList<>();
-        for(PhoneDTO p : userRequest.getPhones()){
-            phones.add(PhoneEntity.builder()
-                            .contrycode(p.getContrycode())
-                            .citycode(p.getCitycode())
-                            .number(p.getNumber())
-                    .build());
-        }
-
         // saves the user
-        UserEntity saved = iUserService.saveUser(UserEntity.builder()
-                .name(userRequest.getName())
-                .email(userRequest.getEmail())
-                .password(userRequest.getPassword())
-                .phones(phones)
-                .build());
+        UserEntity saved = iUserService.saveUser(userRequest2Entity(userRequest));
 
         // returns the data
         return userEntity2DTO(saved);
 
     }
 
-    //@PutMapping
-    //public UserRegistryResponseDTO updateUser()
+    @PutMapping("/{id}")
+    public UserResponseDTO updateUser(@PathVariable String id, @RequestBody UserRequestDTO userRequest){
+        log.info(String.format("Updating user id %s...", id));
+        log.info(String.format("User data: %s", util.obj2Json(userRequest)));
 
 
+        UserEntity updated = iUserService.update(id, userRequest2Entity(userRequest));
 
+        return userEntity2DTO(updated);
+    }
+
+
+    /**
+     * User entity to DTO
+     *
+     */
     private UserResponseDTO userEntity2DTO(UserEntity entity){
         return UserResponseDTO.builder()
                 .id(entity.getId().toString())
@@ -84,6 +80,37 @@ public class UserController {
                 .token(entity.getToken())
                 .active(entity.isActive())
                 .build();
+    }
+
+
+    /**
+     * User DTO to entity
+     *
+     */
+    private UserEntity userRequest2Entity(UserRequestDTO userRequest) {
+        return UserEntity.builder()
+                .name(userRequest.getName())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+                .phones(phoneRequest2Entity(userRequest))
+                .build() ;
+    }
+
+
+    /**
+     * Phones DTO to entity
+     *
+     */
+    private List<PhoneEntity> phoneRequest2Entity(UserRequestDTO userRequest){
+        List<PhoneEntity> phones = new ArrayList<>();
+        for(PhoneDTO p : userRequest.getPhones()){
+            phones.add(PhoneEntity.builder()
+                    .contrycode(p.getContrycode())
+                    .citycode(p.getCitycode())
+                    .number(p.getNumber())
+                    .build());
+        }
+        return phones;
     }
 }
 

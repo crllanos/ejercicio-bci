@@ -37,22 +37,9 @@ public class UserService implements IUserService {
 
     @Override
     public UserEntity saveUser(UserEntity user) {
-        log.info(String.format("UserRegistryService.saveUser() : %s", util.obj2Json(user)));
+        log.info(String.format("UserService.saveUser() : %s", util.obj2Json(user)));
 
-        // Validates password
-        if(StringUtils.isEmpty(user.getPassword())  || !validatePassword(user.getPassword())){
-            throw new IllegalArgumentException("Invalid password");
-        }
-
-        // validates email
-        if(StringUtils.isEmpty(user.getEmail()) || !validateEmail(user.getEmail())){
-            throw new IllegalArgumentException("Invalid e-mail");
-        }
-
-        // validar email unique
-        if(!ObjectUtils.isEmpty(userRepository.findByEmail(user.getEmail()))){
-            throw new IllegalArgumentException("El correo ya esta registrado");
-        }
+        isValidUser(user, true);
 
         user.setId(UUID.randomUUID());
         user.setCreated(new Date());
@@ -69,15 +56,54 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserEntity> findAll() {
+        log.info("UserService.findAll()");
         return (List<UserEntity>) userRepository.findAll();
     }
 
     @Override
     public UserEntity findById(String id) {
+        log.info(String.format("UserService.findById() : %s", id));
         return userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new EntityNotFoundException(String.format("User %s not found", id)));
     }
 
+    @Override
+    public UserEntity update(String id, UserEntity old) {
+        log.info(String.format("UserService.update() : %s, %s ", id, util.obj2Json(old)));
+        isValidUser(old, false);
+
+        UserEntity update = this.findById(id);
+        update.setName(old.getName());
+        update.setEmail(old.getEmail());
+        update.setPassword(old.getPassword());
+        update.setPhones(old.getPhones());
+        update.setModified(new Date());
+
+        log.info(String.format("Registro a actualizar: %s", util.obj2Json(update)));
+        return userRepository.save(update);
+    }
+
+
+
+
+    private void isValidUser(UserEntity user, boolean isNewEmail){
+        // Validates password
+        if(ObjectUtils.isEmpty(user.getPassword())  || !validatePassword(user.getPassword())){
+            throw new IllegalArgumentException("Invalid password");
+        }
+
+        // validates email
+        if(ObjectUtils.isEmpty(user.getEmail()) || !validateEmail(user.getEmail())){
+            throw new IllegalArgumentException("Invalid e-mail");
+        }
+
+        if(isNewEmail){
+            // validar email unique
+            if(!ObjectUtils.isEmpty(userRepository.findByEmail(user.getEmail()))){
+                throw new IllegalArgumentException("El correo ya esta registrado");
+            }
+        }
+    }
 
     private static boolean validateEmail(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);

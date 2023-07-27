@@ -11,4 +11,6 @@ public interface IUserService {
     List<UserEntity> findAll();
 
     UserEntity findById(String id);
+
+    UserEntity update(String id, UserEntity old);
 }
