@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
@@ -67,6 +68,10 @@ public class UserService implements IUserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public List<UserEntity> findAll() {
+        return (List<UserEntity>) userRepository.findAll();
+    }
 
 
     private static boolean validateEmail(String emailStr) {

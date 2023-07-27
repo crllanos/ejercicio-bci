@@ -12,6 +12,7 @@ public class BciExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<BciException> handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error(String.format("Bad request: %s.", e.getMessage()));
         return ResponseEntity.badRequest().body(BciException.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message(e.getMessage())

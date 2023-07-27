@@ -13,6 +13,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserRegistryResponseDTO {
     private String id;
+    private String name;
+    private String email;
     private Date created;
     private Date modified;
     private Date lastLogin;
