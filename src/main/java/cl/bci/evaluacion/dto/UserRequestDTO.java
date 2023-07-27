@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegistryRequestDTO {
+public class UserRequestDTO {
     private String name;
     private String email;
     private String password;

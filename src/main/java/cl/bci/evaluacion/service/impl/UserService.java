@@ -54,7 +54,6 @@ public class UserService implements IUserService {
             throw new IllegalArgumentException("El correo ya esta registrado");
         }
 
-
         user.setId(UUID.randomUUID());
         user.setCreated(new Date());
         user.setModified(new Date());
@@ -64,8 +63,7 @@ public class UserService implements IUserService {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 10);
         user.setActive(randomNum %2 == 0);
 
-        log.info(String.format("registro a persistir: %s", util.obj2Json(user)));
-
+        log.info(String.format("Registro a persistir: %s", util.obj2Json(user)));
         return userRepository.save(user);
     }
 

@@ -1,9 +1,8 @@
 package cl.bci.evaluacion.controller;
 
 import cl.bci.evaluacion.dto.PhoneDTO;
-import cl.bci.evaluacion.dto.RegistryResponseDTO;
-import cl.bci.evaluacion.dto.UserRegistryRequestDTO;
-import cl.bci.evaluacion.dto.UserRegistryResponseDTO;
+import cl.bci.evaluacion.dto.UserRequestDTO;
+import cl.bci.evaluacion.dto.UserResponseDTO;
 import cl.bci.evaluacion.entity.PhoneEntity;
 import cl.bci.evaluacion.entity.UserEntity;
 import cl.bci.evaluacion.service.IUserService;
@@ -19,36 +18,36 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user-registry/")
-public class UserRegistryController {
+public class UserController {
 
-    private final IUserService iUserRegistryService;
+    private final IUserService iUserService;
 
     private final Util util;
 
     @GetMapping
-    public List<UserRegistryResponseDTO> getUserList(){
+    public List<UserResponseDTO> getUserList(){
         log.info("Searching list of users...");
-        List<UserRegistryResponseDTO> response = new ArrayList<>();
-        for(UserEntity u : iUserRegistryService.findAll()){
+        List<UserResponseDTO> response = new ArrayList<>();
+        for(UserEntity u : iUserService.findAll()){
             response.add(userEntity2DTO(u));
         }
         return response;
     }
 
     @GetMapping("/{id}")
-    public UserRegistryResponseDTO getUserById(@PathVariable String id){
+    public UserResponseDTO getUserById(@PathVariable String id){
         log.info(String.format("Searching users id %s...", id));
-        return userEntity2DTO(iUserRegistryService.findById(id));
+        return userEntity2DTO(iUserService.findById(id));
     }
 
 
     @PostMapping
-    public UserRegistryResponseDTO userRegistry(@RequestBody UserRegistryRequestDTO userRegistry){
-        log.info(String.format("userRegistryRequest: %s", util.obj2Json(userRegistry)));
+    public UserResponseDTO createUser(@RequestBody UserRequestDTO userRequest){
+        log.info(String.format("Creating user: %s", util.obj2Json(userRequest)));
 
         // phone list
         List<PhoneEntity> phones = new ArrayList<>();
-        for(PhoneDTO p : userRegistry.getPhones()){
+        for(PhoneDTO p : userRequest.getPhones()){
             phones.add(PhoneEntity.builder()
                             .contrycode(p.getContrycode())
                             .citycode(p.getCitycode())
@@ -57,10 +56,10 @@ public class UserRegistryController {
         }
 
         // saves the user
-        UserEntity saved = iUserRegistryService.saveUser(UserEntity.builder()
-                .name(userRegistry.getName())
-                .email(userRegistry.getEmail())
-                .password(userRegistry.getPassword())
+        UserEntity saved = iUserService.saveUser(UserEntity.builder()
+                .name(userRequest.getName())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
                 .phones(phones)
                 .build());
 
@@ -69,9 +68,13 @@ public class UserRegistryController {
 
     }
 
+    //@PutMapping
+    //public UserRegistryResponseDTO updateUser()
 
-    private UserRegistryResponseDTO userEntity2DTO(UserEntity entity){
-        return UserRegistryResponseDTO.builder()
+
+
+    private UserResponseDTO userEntity2DTO(UserEntity entity){
+        return UserResponseDTO.builder()
                 .id(entity.getId().toString())
                 .name(entity.getName())
                 .email(entity.getEmail())

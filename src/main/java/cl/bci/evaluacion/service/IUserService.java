@@ -5,7 +5,10 @@ import cl.bci.evaluacion.entity.UserEntity;
 import java.util.List;
 
 public interface IUserService {
+
     UserEntity saveUser(UserEntity user);
+
     List<UserEntity> findAll();
+
     UserEntity findById(String id);
 }
