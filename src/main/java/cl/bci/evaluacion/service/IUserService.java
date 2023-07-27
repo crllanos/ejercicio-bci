@@ -7,6 +7,5 @@ import java.util.List;
 public interface IUserService {
     UserEntity saveUser(UserEntity user);
     List<UserEntity> findAll();
-    //UserBO findUserById(String id);
-    //List<UserBO> findAllUsers();
+    UserEntity findById(String id);
 }

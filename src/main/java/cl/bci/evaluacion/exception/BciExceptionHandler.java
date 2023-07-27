@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
+
 @Slf4j
 @ControllerAdvice
 public class BciExceptionHandler {
@@ -14,8 +16,16 @@ public class BciExceptionHandler {
     public ResponseEntity<BciException> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error(String.format("Bad request: %s.", e.getMessage()));
         return ResponseEntity.badRequest().body(BciException.builder()
-                .status(HttpStatus.BAD_REQUEST)
                 .message(e.getMessage())
                 .build());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<BciException> handleEntityNotFoundException(EntityNotFoundException e) {
+        log.error(String.format("Not found: %s.", e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(BciException.builder()
+                        .message(e.getMessage())
+                        .build());
     }
 }

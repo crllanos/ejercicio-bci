@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +72,12 @@ public class UserService implements IUserService {
     @Override
     public List<UserEntity> findAll() {
         return (List<UserEntity>) userRepository.findAll();
+    }
+
+    @Override
+    public UserEntity findById(String id) {
+        return userRepository.findById(UUID.fromString(id))
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User %s not found", id)));
     }
 
 

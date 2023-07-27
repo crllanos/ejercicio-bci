@@ -11,6 +11,5 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BciException {
-    private HttpStatus status;
     private String message;
 }

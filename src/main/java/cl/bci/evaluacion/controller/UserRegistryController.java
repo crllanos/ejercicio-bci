@@ -30,21 +30,17 @@ public class UserRegistryController {
         log.info("Searching list of users...");
         List<UserRegistryResponseDTO> response = new ArrayList<>();
         for(UserEntity u : iUserRegistryService.findAll()){
-            response.add(
-                UserRegistryResponseDTO.builder()
-                            .id(u.getId().toString())
-                            .name(u.getName())
-                            .email(u.getEmail())
-                            .created(u.getCreated())
-                            .modified(u.getModified())
-                            .lastLogin(u.getLastLogin())
-                            .token(u.getToken())
-                            .active(u.isActive())
-                        .build()
-            );
+            response.add(userEntity2DTO(u));
         }
         return response;
     }
+
+    @GetMapping("/{id}")
+    public UserRegistryResponseDTO getUserById(@PathVariable String id){
+        log.info(String.format("Searching users id %s...", id));
+        return userEntity2DTO(iUserRegistryService.findById(id));
+    }
+
 
     @PostMapping
     public UserRegistryResponseDTO userRegistry(@RequestBody UserRegistryRequestDTO userRegistry){
@@ -69,18 +65,22 @@ public class UserRegistryController {
                 .build());
 
         // returns the data
-        return UserRegistryResponseDTO.builder()
-                .id(saved.getId().toString())
-                .name(saved.getName())
-                .email(saved.getEmail())
-                .created(saved.getCreated())
-                .modified(saved.getModified())
-                .lastLogin(saved.getLastLogin())
-                .token(saved.getToken())
-                .active(saved.isActive())
-                .build();
+        return userEntity2DTO(saved);
 
     }
 
+
+    private UserRegistryResponseDTO userEntity2DTO(UserEntity entity){
+        return UserRegistryResponseDTO.builder()
+                .id(entity.getId().toString())
+                .name(entity.getName())
+                .email(entity.getEmail())
+                .created(entity.getCreated())
+                .modified(entity.getModified())
+                .lastLogin(entity.getLastLogin())
+                .token(entity.getToken())
+                .active(entity.isActive())
+                .build();
+    }
 }
 
