@@ -5,10 +5,10 @@ import cl.bci.evaluacion.dto.RegistryResponseDTO;
 import cl.bci.evaluacion.dto.UserRegistryRequestDTO;
 import cl.bci.evaluacion.entity.PhoneEntity;
 import cl.bci.evaluacion.entity.UserEntity;
-import cl.bci.evaluacion.service.IUserRegistryService;
+import cl.bci.evaluacion.service.IUserService;
+import cl.bci.evaluacion.util.Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,13 +21,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRegistryController {
 
-    private final IUserRegistryService iUserRegistryService;
+    private final IUserService iUserRegistryService;
+
+    private final Util util;
 
     @PostMapping("/user-registry")
     public RegistryResponseDTO userRegistry(@RequestBody UserRegistryRequestDTO userRegistry){
-        log.info(String.format("userRegistryRequest: %s", userRegistry));
+        log.info(String.format("userRegistryRequest: %s", util.obj2Json(userRegistry)));
 
         List<PhoneEntity> phones = new ArrayList<>();
+
         for(PhoneDTO p : userRegistry.getPhones()){
             phones.add(PhoneEntity.builder()
                             .contrycode(p.getContrycode())
