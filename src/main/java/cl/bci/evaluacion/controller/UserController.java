@@ -26,45 +26,47 @@ public class UserController {
 
     @GetMapping
     public List<UserResponseDTO> getUserList(){
-        log.info("Searching list of users...");
+        log.info("GET /user-registry/");
         List<UserResponseDTO> response = new ArrayList<>();
         for(UserEntity u : iUserService.findAll()){
             response.add(userEntity2DTO(u));
         }
+        log.info(String.format("response: %d", response.size()));
         return response;
     }
 
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable String id){
-        log.info(String.format("Searching users id %s...", id));
-        return userEntity2DTO(iUserService.findById(id));
+        log.info(String.format("GET /user-registry/%s", id));
+        UserEntity found = iUserService.findById(id);
+        log.info(String.format("response: %s", util.obj2Json(found)));
+        return userEntity2DTO(found);
     }
 
 
     @PostMapping
     public UserResponseDTO createUser(@RequestBody UserRequestDTO userRequest){
+        log.info("POST /user-registry/");
         log.info(String.format("Creating user: %s", util.obj2Json(userRequest)));
-
-        // saves the user
         UserEntity saved = iUserService.saveUser(userRequest2Entity(userRequest));
-
-        // returns the data
+        log.info(String.format("response: %s", util.obj2Json(saved)));
         return userEntity2DTO(saved);
-
     }
 
     @PutMapping("/{id}")
     public UserResponseDTO updateUser(@PathVariable String id, @RequestBody UserRequestDTO userRequest){
-        log.info(String.format("Updating user id %s...", id));
-        log.info(String.format("User data: %s", util.obj2Json(userRequest)));
+        log.info(String.format("PUT /user-registry/%s", id));
+        log.info(String.format("Updating user: %s", util.obj2Json(userRequest)));
         UserEntity updated = iUserService.update(id, userRequest2Entity(userRequest));
+        log.info(String.format("response: %s", util.obj2Json(updated)));
         return userEntity2DTO(updated);
     }
 
     @DeleteMapping("/{id}")
     public UserResponseDTO deleteUser(@PathVariable String id){
-        log.info(String.format("Deleting user id %s...", id));
+        log.info(String.format("DELETE /user-registry/%s", id));
         UserEntity deleted = iUserService.delete(id);
+        log.info(String.format("response: %s", util.obj2Json(deleted)));
         return userEntity2DTO(deleted);
     }
 

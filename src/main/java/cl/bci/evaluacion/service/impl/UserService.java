@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -18,6 +17,8 @@ import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -50,14 +51,15 @@ public class UserService implements IUserService {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 10);
         user.setActive(randomNum %2 == 0);
 
-        log.info(String.format("Registro a persistir: %s", util.obj2Json(user)));
+        log.info(String.format("Persisting: %s", util.obj2Json(user)));
         return userRepository.save(user);
     }
 
     @Override
     public List<UserEntity> findAll() {
         log.info("UserService.findAll()");
-        return (List<UserEntity>) userRepository.findAll();
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -79,12 +81,13 @@ public class UserService implements IUserService {
         update.setPhones(old.getPhones());
         update.setModified(new Date());
 
-        log.info(String.format("Registro a actualizar: %s", util.obj2Json(update)));
+        log.info(String.format("Updating: %s", util.obj2Json(update)));
         return userRepository.save(update);
     }
 
     @Override
     public UserEntity delete(String id) {
+        log.info(String.format("UserService.delete() : %s", id));
         UserEntity del = this.findById(id);
         userRepository.delete(del);
         return del;
@@ -107,9 +110,9 @@ public class UserService implements IUserService {
         }
 
         if(isNewEmail){
-            // validar email unique
+            // validate email unique
             if(!ObjectUtils.isEmpty(userRepository.findByEmail(user.getEmail()))){
-                throw new IllegalArgumentException("El correo ya esta registrado");
+                throw new IllegalArgumentException("Email already exists");
             }
         }
     }
