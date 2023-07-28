@@ -25,7 +25,7 @@ public class UserEntity {
 
     private String name;
     private String email;
-    private String password;
+    transient private String password;
     private Date created;
     private Date modified;
     private Date lastLogin;

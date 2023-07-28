@@ -57,12 +57,18 @@ public class UserController {
     public UserResponseDTO updateUser(@PathVariable String id, @RequestBody UserRequestDTO userRequest){
         log.info(String.format("Updating user id %s...", id));
         log.info(String.format("User data: %s", util.obj2Json(userRequest)));
-
-
         UserEntity updated = iUserService.update(id, userRequest2Entity(userRequest));
-
         return userEntity2DTO(updated);
     }
+
+    @DeleteMapping("/{id}")
+    public UserResponseDTO deleteUser(@PathVariable String id){
+        log.info(String.format("Deleting user id %s...", id));
+        UserEntity deleted = iUserService.delete(id);
+        return userEntity2DTO(deleted);
+    }
+
+
 
 
     /**

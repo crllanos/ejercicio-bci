@@ -13,4 +13,6 @@ public interface IUserService {
     UserEntity findById(String id);
 
     UserEntity update(String id, UserEntity old);
+
+    UserEntity delete(String id);
 }
