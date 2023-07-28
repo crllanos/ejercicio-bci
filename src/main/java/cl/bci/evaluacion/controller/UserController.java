@@ -43,7 +43,6 @@ public class UserController {
         return userEntity2DTO(found);
     }
 
-
     @PostMapping
     public UserResponseDTO createUser(@RequestBody UserRequestDTO userRequest){
         log.info("POST /user-registry/");

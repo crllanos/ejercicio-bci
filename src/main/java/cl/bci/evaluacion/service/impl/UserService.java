@@ -34,7 +34,7 @@ public class UserService implements IUserService {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern VALID_PASSWORD_REGEX =
-            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$)$");
+            Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
 
     @Override
     public UserEntity saveUser(UserEntity user) {
@@ -124,7 +124,7 @@ public class UserService implements IUserService {
 
     private static boolean validatePassword(String passw) {
         Matcher matcher = VALID_PASSWORD_REGEX.matcher(passw);
-        return !matcher.find();
+        return matcher.find();
     }
 
 }
