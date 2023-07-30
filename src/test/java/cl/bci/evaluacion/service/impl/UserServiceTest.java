@@ -8,6 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -57,14 +62,44 @@ class UserServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
-
     @Test
     public void shouldSaveUser_Ok(){
         when(userRepository.save(any())).thenReturn(mockUser());
-        when(util.obj2Json(any())).thenReturn("obj2Json");
+        assertNotNull(userService.saveUser(mockUser()));
+    }
 
-        UserEntity a = userService.saveUser(mockUser());
-        assertNotNull(a);
+    @Test
+    public void shouldListUser_Ok(){
+        assertNotNull(userService.findAll());
+    }
+
+    @Test
+    public void shouldNotGetUser_invalidUUID(){
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.findById("abc");
+        });
+        String expectedMessage = "Invalid UUID string";
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void shouldGetUser_Ok(){
+        when(userRepository.findById(UUID.fromString(mockuuid))).thenReturn(Optional.ofNullable(mockUser()));
+        assertNotNull(userService.findById(mockuuid));
+    }
+
+    @Test
+    public void shouldUpdateUser_Ok(){
+        when(userRepository.findById(UUID.fromString(mockuuid))).thenReturn(Optional.ofNullable(mockUser()));
+        when(userRepository.save(any())).thenReturn(mockUser());
+        assertNotNull(userService.update(mockuuid, mockUser()));
+    }
+
+    @Test
+    public void shouldDeleteUser_Ok(){
+        when(userRepository.findById(UUID.fromString(mockuuid))).thenReturn(Optional.ofNullable(mockUser()));
+        assertNotNull(userService.delete(mockuuid));
     }
 
 
@@ -72,6 +107,8 @@ class UserServiceTest {
     /**
      * mock data
      */
+    private static final String mockuuid = "c7a642f1-a413-4f32-8d98-27b9b3c1ff10";
+
     private UserEntity mockUser(){
         return UserEntity.builder().name("test").email("correo@valido.cl").password("AbCdEfG1").build();
     }
@@ -94,4 +131,11 @@ class UserServiceTest {
         return user;
     }
 
+    private List<UserEntity> mockUserList(){
+        List<UserEntity> list = new ArrayList<>();
+        list.add(mockUser());
+        list.add(mockUser());
+        list.add(mockUser());
+        return list;
+    }
 }
