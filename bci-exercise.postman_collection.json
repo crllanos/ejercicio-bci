@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "d67b8173-a8e1-483c-aa10-2058a628bcf1",
+		"name": "bci-jul23exercise",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJid2F5bmUiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlzcyI6Ii91c2VyLXJlZ2lzdHJ5L2xvZ2luIiwiZXhwIjoxNjkwNzY4OTE5fQ.hswvyRyoOmYoJoqCQ9r2yXgkxV-zufCeUe8rylKuNCU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Juan Rodriguez\",\n    \"email\": \"juan@rodriguez11.org\",\n    \"password\": \"aaaaaa1A\",\n    \"phones\": [\n        {\n            \"number\": \"11111111\",\n            \"citycode\": \"1\",\n            \"contrycode\": \"56\"\n        },\n        {\n            \"number\": \"11111111\",\n            \"citycode\": \"2\",\n            \"contrycode\": \"56\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user-registry/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user-registry",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJid2F5bmUiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlzcyI6Ii91c2VyLXJlZ2lzdHJ5L2xvZ2luIiwiZXhwIjoxNjkwNzY4OTE5fQ.hswvyRyoOmYoJoqCQ9r2yXgkxV-zufCeUe8rylKuNCU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user-registry/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user-registry",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user-registry/f6be8840-e4a1-4005-9366-b2e9f3fc05a1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user-registry",
+						"f6be8840-e4a1-4005-9366-b2e9f3fc05a1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Juan Rodriguez Nuevonombre\",\n    \"email\": \"juan@rodriguez1.org\",\n    \"password\": \"AAAbbbCCC123\",\n    \"phones\": [\n        {\n            \"number\": \"11111111\",\n            \"citycode\": \"10\",\n            \"contrycode\": \"56\"\n        },\n        {\n            \"number\": \"11111111\",\n            \"citycode\": \"20\",\n            \"contrycode\": \"56\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user-registry/f6be8840-e4a1-4005-9366-b2e9f3fc05a1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user-registry",
+						"f6be8840-e4a1-4005-9366-b2e9f3fc05a1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJid2F5bmUiLCJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlzcyI6Ii91c2VyLXJlZ2lzdHJ5L2xvZ2luIiwiZXhwIjoxNjkwNzY4OTE5fQ.hswvyRyoOmYoJoqCQ9r2yXgkxV-zufCeUe8rylKuNCU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user-registry/f6be8840-e4a1-4005-9366-b2e9f3fc05a1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user-registry",
+						"f6be8840-e4a1-4005-9366-b2e9f3fc05a1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "bwayne",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "batman",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/user-registry/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user-registry",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

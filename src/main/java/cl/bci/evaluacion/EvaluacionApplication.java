@@ -13,8 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-@SpringBootApplication
 @Slf4j
+@SpringBootApplication
 public class EvaluacionApplication {
 
 	public static void main(String[] args) {
@@ -28,6 +28,7 @@ public class EvaluacionApplication {
 	@Bean
 	CommandLineRunner run(IAdminService adminService, IRoleService roleService){
 		return args -> {
+			log.info("generando admins dummy");
 			String roleAdmin = "ROLE_ADMIN";
 			String roleSuperAdmin = "ROLE_SUPERADMIN";
 
